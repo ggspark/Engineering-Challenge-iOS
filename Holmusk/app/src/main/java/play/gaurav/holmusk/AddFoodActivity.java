@@ -2,9 +2,13 @@ package play.gaurav.holmusk;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import java.util.List;
 
@@ -17,24 +21,50 @@ import retrofit.client.Response;
 
 public class AddFoodActivity extends ActionBarActivity {
 
+    AutoCompleteTextView searchBox;
+    ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_food);
+        searchBox = (AutoCompleteTextView) findViewById(R.id.search_box);
+        adapter = new CustomArrayAdapter(this, android.R.layout.simple_dropdown_item_1line);
+        searchBox.setAdapter(adapter);
 
-        Callback<List<FoodItem>> callback = new Callback<List<FoodItem>>() {
+        searchBox.addTextChangedListener(new TextWatcher() {
             @Override
-            public void success(List<FoodItem> foodItems, Response response) {
-                Log.d("Response", response.toString());
-                Log.d("Item", foodItems.toString());
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                Log.e("Error", "Error in fetching API");
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                APIServices.getFoodItemService().getFoodList(charSequence.toString(), new Callback<List<FoodItem>>() {
+                    @Override
+                    public void success(List<FoodItem> foodItems, Response response) {
+                        adapter.clear();
+                        for(FoodItem item : foodItems) {
+                            adapter.add(item.getName());
+                            Log.d("Item", item.getName());
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e("Error", "Error in fetching API");
+                    }
+                });
             }
-        };
-        APIServices.getFoodItemService().getFoodList("chicken", callback);
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
     }
 
     @Override
