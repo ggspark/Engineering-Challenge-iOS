@@ -1,5 +1,6 @@
 package play.gaurav.holmusk;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -36,6 +38,7 @@ public class AddFoodActivity extends ActionBarActivity {
     List<FoodItem> foodItemList;
     private BarChart mChart;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +55,8 @@ public class AddFoodActivity extends ActionBarActivity {
         mChart.setDrawBarShadow(false);
         mChart.setDrawGridBackground(false);
         mChart.setScaleEnabled(false);
+        mChart.setDoubleTapToZoomEnabled(false);
         mChart.setHighlightEnabled(false);
-
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -61,11 +64,8 @@ public class AddFoodActivity extends ActionBarActivity {
         xAxis.setDrawGridLines(false);
 
         mChart.getAxisLeft().setDrawGridLines(false);
-
-
         // add a nice and smooth animation
         mChart.animateY(2500);
-
         mChart.getLegend().setEnabled(false);
 
         searchBox.addTextChangedListener(new TextWatcher() {
@@ -106,6 +106,9 @@ public class AddFoodActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 setBarData(foodItemList.get(i));
+                InputMethodManager imm = (InputMethodManager)getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchBox.getWindowToken(), 0);
             }
         });
 
@@ -126,7 +129,7 @@ public class AddFoodActivity extends ActionBarActivity {
 
         BarDataSet set1 = new BarDataSet(yVals1, "Data Set");
         set1.setColors(ColorTemplate.VORDIPLOM_COLORS);
-        set1.setDrawValues(false);
+        set1.setDrawValues(true);
 
         ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
         dataSets.add(set1);
@@ -135,6 +138,8 @@ public class AddFoodActivity extends ActionBarActivity {
 
         mChart.setData(data);
         mChart.invalidate();
+        // add a nice and smooth animation
+        mChart.animateY(2500);
     }
 
     @Override
