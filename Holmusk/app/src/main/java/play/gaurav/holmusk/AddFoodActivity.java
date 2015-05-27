@@ -2,16 +2,46 @@ package play.gaurav.holmusk;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.List;
+
+import play.gaurav.holmusk.controller.FoodItemService;
+import play.gaurav.holmusk.models.FoodItem;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class AddFoodActivity extends ActionBarActivity {
 
+    private FoodItemService service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_food);
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://test.holmusk.com/")
+                .build();
+
+        service = restAdapter.create(FoodItemService.class);
+        Callback<List<FoodItem>> callback = new Callback<List<FoodItem>>() {
+            @Override
+            public void success(List<FoodItem> foodItems, Response response) {
+                Log.d("Response", response.toString());
+                Log.d("Item", foodItems.toString());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("Error", "Error in fetching API");
+            }
+        };
+        service.getFoodList("chicken", callback );
     }
 
     @Override
