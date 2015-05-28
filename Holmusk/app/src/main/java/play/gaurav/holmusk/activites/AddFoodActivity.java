@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.exceptions.RealmException;
 import play.gaurav.holmusk.R;
 import play.gaurav.holmusk.adapters.CustomArrayAdapter;
 import play.gaurav.holmusk.controller.APIServices;
@@ -108,14 +109,23 @@ public class AddFoodActivity extends BaseActivity {
         if (id == R.id.save) {
             if(selectedItem != null)
             {
+
                 Realm realm = Realm.getInstance(this);
-                // Copy the object to Realm. Any further changes must happen on realmUser
-                long begin = System.currentTimeMillis();
-                realm.beginTransaction();
-                FoodItem saveItem = realm.copyToRealm(selectedItem);
-                realm.commitTransaction();
-                long end = System.currentTimeMillis();
-                Toast.makeText(this, "Time taken to save data = "+ (end-begin)+" ms", Toast.LENGTH_LONG ).show();
+                try {
+                    // Copy the object to Realm. Any further changes must happen on realmUser
+                    long begin = System.currentTimeMillis();
+                    realm.beginTransaction();
+                    FoodItem saveItem = realm.copyToRealm(selectedItem);
+                    realm.commitTransaction();
+                    long end = System.currentTimeMillis();
+                    Toast.makeText(this, "Time taken to save data = " + (end - begin) + " ms", Toast.LENGTH_LONG).show();
+                }catch (RealmException e){
+                    realm.commitTransaction();
+                    Toast.makeText(this, "Item already exists", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    realm.commitTransaction();
+                    e.printStackTrace();
+                }
                 finish();
             }
             return true;
