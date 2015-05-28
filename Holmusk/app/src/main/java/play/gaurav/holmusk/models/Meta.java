@@ -3,12 +3,14 @@ package play.gaurav.holmusk.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * @author Gaurav Gupta <gaurav@thegauravgupta.com>
  * @since 27/May/2015
 
     private String fibre;
- */public class Meta {
+ */public class Meta extends RealmObject{
 
     @Expose
     private String fibre;

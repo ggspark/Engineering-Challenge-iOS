@@ -3,12 +3,16 @@ package play.gaurav.holmusk.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * @author Gaurav Gupta <gaurav@thegauravgupta.com>
  * @since 27/May/2015
  */
-public class FoodItem {
+public class FoodItem extends RealmObject{
 
+    @PrimaryKey
     @SerializedName("_id")
     @Expose
     private String Id;

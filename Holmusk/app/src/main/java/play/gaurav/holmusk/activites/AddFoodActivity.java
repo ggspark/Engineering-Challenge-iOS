@@ -12,9 +12,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import java.util.List;
 
+import io.realm.Realm;
 import play.gaurav.holmusk.R;
 import play.gaurav.holmusk.adapters.CustomArrayAdapter;
 import play.gaurav.holmusk.controller.APIServices;
@@ -28,6 +30,7 @@ public class AddFoodActivity extends BaseActivity {
 
     AutoCompleteTextView searchBox;
     ArrayAdapter<String> adapter;
+    FoodItem selectedItem;
 
 
     @Override
@@ -77,7 +80,7 @@ public class AddFoodActivity extends BaseActivity {
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                setBarData(foodItemList.get(i));
+                setBarData(selectedItem = foodItemList.get(i));
                 InputMethodManager imm = (InputMethodManager)getSystemService(
                         Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(searchBox.getWindowToken(), 0);
@@ -103,6 +106,18 @@ public class AddFoodActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.save) {
+            if(selectedItem != null)
+            {
+                Realm realm = Realm.getInstance(this);
+                // Copy the object to Realm. Any further changes must happen on realmUser
+                long begin = System.currentTimeMillis();
+                realm.beginTransaction();
+                FoodItem saveItem = realm.copyToRealm(selectedItem);
+                realm.commitTransaction();
+                long end = System.currentTimeMillis();
+                Toast.makeText(this, "Time taken to save data = "+ (end-begin)+" ms", Toast.LENGTH_LONG ).show();
+                finish();
+            }
             return true;
         }
 
