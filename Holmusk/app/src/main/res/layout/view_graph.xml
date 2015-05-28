@@ -39,6 +39,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"/>
 
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/chart5"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:visibility="gone"/>
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

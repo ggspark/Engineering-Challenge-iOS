@@ -4,6 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +22,21 @@ import play.gaurav.holmusk.models.Meta;
 
 public class MainActivity extends BaseActivity {
 
+    PieChart chart5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupCharts();
+    }
+
+    @Override
+    protected void setupCharts() {
+        super.setupCharts();
+
+        chart5 = (PieChart) findViewById(R.id.chart5);
+        setupPieChart(chart5);
+        chart5.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -32,6 +47,26 @@ public class MainActivity extends BaseActivity {
         foodItemList = new ArrayList<FoodItem>(result);
         FoodItem totalItem = aggregate(foodItemList);
         setChartData(totalItem);
+        setFibreChart(totalItem);
+
+    }
+
+    private void setFibreChart(FoodItem totalItem){
+
+        //Chart 5: Fibre Distribution
+        {
+            ArrayList<String> xVals = new ArrayList<String>();
+            ArrayList<Entry> yVals = new ArrayList<Entry>();
+            int index = 0;
+            for(FoodItem item : foodItemList){
+                float fibre = getFloat(item.getMeta().getFibre());
+                float total = getFloat(totalItem.getMeta().getFibre());
+                xVals.add(item.getName());
+                yVals.add(new Entry(fibre/total, index++));
+            }
+            setPieData(xVals, yVals, chart5, ColorTemplate.COLORFUL_COLORS);
+            chart5.setCenterText(getFloat(totalItem.getMeta().getFibre()) + " g of Fibre");
+        }
 
     }
 

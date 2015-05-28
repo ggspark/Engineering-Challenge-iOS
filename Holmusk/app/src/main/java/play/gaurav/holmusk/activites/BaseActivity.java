@@ -93,7 +93,7 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    private static void setupPieChart(PieChart chart) {
+    protected static void setupPieChart(PieChart chart) {
         chart.setUsePercentValues(true);
         chart.setDescription("");
         chart.setDragDecelerationFrictionCoef(0.95f);
@@ -109,7 +109,7 @@ public class BaseActivity extends AppCompatActivity {
         chart.getLegend().setEnabled(false);
     }
 
-    private static void setupBarChart(BarChart chart) {
+    protected static void setupBarChart(BarChart chart) {
         chart.setDescription("");
         chart.setMaxVisibleValueCount(60);
         chart.setPinchZoom(false);
@@ -203,7 +203,7 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    private static void setBarData(ArrayList<String> xVals, ArrayList<BarEntry> yVals, BarChart chart, int[] colors) {
+    protected static void setBarData(ArrayList<String> xVals, ArrayList<BarEntry> yVals, BarChart chart, int[] colors) {
         BarDataSet set1 = new BarDataSet(yVals, "BarSet");
         set1.setColors(colors);
         set1.setDrawValues(true);
@@ -219,7 +219,7 @@ public class BaseActivity extends AppCompatActivity {
         chart.animateY(DURATION_MILLIS);
     }
 
-    private void setPieData(ArrayList<String> xVals, ArrayList<Entry> yVals, PieChart chart, int [] colors) {
+    protected static void setPieData(ArrayList<String> xVals, ArrayList<Entry> yVals, PieChart chart, int[] colors) {
         PieDataSet dataSet = new PieDataSet(yVals, "PieSet");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
