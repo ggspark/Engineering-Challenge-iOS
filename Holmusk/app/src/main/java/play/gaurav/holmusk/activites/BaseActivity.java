@@ -19,7 +19,9 @@ import com.github.mikephil.charting.utils.PercentFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
+import io.realm.Realm;
 import play.gaurav.holmusk.R;
 import play.gaurav.holmusk.models.FoodItem;
 
@@ -28,9 +30,11 @@ public class BaseActivity extends AppCompatActivity {
 
     protected static final String NAV_TAG = "Navigation";
     public static final int DURATION_MILLIS = 2500;
+    protected Realm realm;
     protected List<FoodItem> foodItemList;
     protected BarChart chart1;
     protected PieChart chart2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,9 +124,9 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void setBarData(FoodItem item) {
 
-        float protein = Float.parseFloat(item.getMeta().getProtein().substring(0, item.getMeta().getProtein().length() - 2));
-        float carbs = Float.parseFloat(item.getMeta().getCarbohydrate().substring(0, item.getMeta().getCarbohydrate().length() - 2));
-        float fat= Float.parseFloat(item.getMeta().getFat().substring(0, item.getMeta().getFat().length() - 2));
+        float protein = getFloat(item.getMeta().getProtein());
+        float carbs =getFloat(item.getMeta().getCarbohydrate());
+        float fat= getFloat(item.getMeta().getFat());
         float totalCal = protein*4 + carbs*4 + fat*9;
 
         ArrayList<String> xVals = new ArrayList<String>();
@@ -178,5 +182,10 @@ public class BaseActivity extends AppCompatActivity {
         chart2.invalidate();
         chart2.animateY(DURATION_MILLIS);
 
+    }
+
+    protected float getFloat(String item){
+        StringTokenizer st = new StringTokenizer(item);
+        return Float.parseFloat(st.nextToken());
     }
 }

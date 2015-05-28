@@ -105,7 +105,7 @@ public class AddFoodActivity extends BaseActivity {
         if (id == R.id.save) {
             if(selectedItem != null)
             {
-                Realm realm = Realm.getInstance(this);
+                realm = Realm.getInstance(this);
                 try {
                     // Copy the object to Realm. Any further changes must happen on realmUser
                     long begin = System.currentTimeMillis();

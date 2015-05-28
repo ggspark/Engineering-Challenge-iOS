@@ -5,7 +5,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 import play.gaurav.holmusk.R;
+import play.gaurav.holmusk.models.FoodItem;
+import play.gaurav.holmusk.models.Meta;
 
 
 public class MainActivity extends BaseActivity {
@@ -14,7 +21,43 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupCharts();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        realm = Realm.getInstance(this);
+        RealmResults<FoodItem> result = realm.allObjects(FoodItem.class);
+        foodItemList = new ArrayList<FoodItem>(result);
+        FoodItem totalItem = aggregate(foodItemList);
+        setBarData(totalItem);
+
+    }
+
+    private FoodItem aggregate(List<FoodItem> foodItemList){
+        FoodItem total = new FoodItem();
+        total.setName("total");
+        total.setMeta(new Meta());
+        Meta totalMeta = total.getMeta();
+        for(FoodItem item : foodItemList){
+            Meta itemMeta = item.getMeta();
+            totalMeta.setFibre(totalMeta.getFibre() != null ? String.valueOf(getFloat(totalMeta.getFibre()) + getFloat(itemMeta.getFibre())) : itemMeta.getFibre());
+            totalMeta.setPolyunsaturatedFat(totalMeta.getPolyunsaturatedFat() != null ? String.valueOf(getFloat(totalMeta.getPolyunsaturatedFat()) + getFloat(itemMeta.getPolyunsaturatedFat())) : itemMeta.getPolyunsaturatedFat());
+            totalMeta.setSodium(totalMeta.getSodium() != null ? String.valueOf(getFloat(totalMeta.getSodium()) + getFloat(itemMeta.getSodium())) : itemMeta.getSodium());
+            totalMeta.setEnergy(totalMeta.getEnergy() != null ? String.valueOf(getFloat(totalMeta.getEnergy()) + getFloat(itemMeta.getEnergy())) : itemMeta.getEnergy());
+            totalMeta.setCholesterol(totalMeta.getCholesterol() != null ? String.valueOf(getFloat(totalMeta.getCholesterol()) + getFloat(itemMeta.getCholesterol())) : itemMeta.getCholesterol());
+            totalMeta.setFat(totalMeta.getFat() != null ? String.valueOf(getFloat(totalMeta.getFat()) + getFloat(itemMeta.getFat())) : itemMeta.getFat());
+            totalMeta.setSugar(totalMeta.getSugar() != null ? String.valueOf(getFloat(totalMeta.getSugar()) + getFloat(itemMeta.getSugar())) : itemMeta.getSugar());
+            totalMeta.setCarbohydrate(totalMeta.getCarbohydrate() != null ? String.valueOf(getFloat(totalMeta.getCarbohydrate()) + getFloat(itemMeta.getCarbohydrate())) : itemMeta.getCarbohydrate());
+            totalMeta.setSaturatedFat(totalMeta.getSaturatedFat() != null ? String.valueOf(getFloat(totalMeta.getSaturatedFat()) + getFloat(itemMeta.getSaturatedFat())) : itemMeta.getSaturatedFat());
+            totalMeta.setMonounsaturatedFat(totalMeta.getMonounsaturatedFat() != null ? String.valueOf(getFloat(totalMeta.getMonounsaturatedFat()) + getFloat(itemMeta.getMonounsaturatedFat())) : itemMeta.getMonounsaturatedFat());
+            totalMeta.setProtein(totalMeta.getProtein() != null ? String.valueOf(getFloat(totalMeta.getProtein()) + getFloat(itemMeta.getProtein())) : itemMeta.getProtein());
+            totalMeta.setPotassium(totalMeta.getPotassium() != null ? String.valueOf(getFloat(totalMeta.getPotassium()) + getFloat(itemMeta.getPotassium())) : itemMeta.getPotassium());
+        }
+        return total;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
