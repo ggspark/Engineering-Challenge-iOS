@@ -81,7 +81,7 @@ public class AddFoodActivity extends BaseActivity {
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                setBarData(selectedItem = foodItemList.get(i));
+                setChartData(selectedItem = foodItemList.get(i));
                 InputMethodManager imm = (InputMethodManager)getSystemService(
                         Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(searchBox.getWindowToken(), 0);

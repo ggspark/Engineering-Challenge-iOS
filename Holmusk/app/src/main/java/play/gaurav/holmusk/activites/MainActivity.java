@@ -31,7 +31,7 @@ public class MainActivity extends BaseActivity {
         RealmResults<FoodItem> result = realm.allObjects(FoodItem.class);
         foodItemList = new ArrayList<FoodItem>(result);
         FoodItem totalItem = aggregate(foodItemList);
-        setBarData(totalItem);
+        setChartData(totalItem);
 
     }
 

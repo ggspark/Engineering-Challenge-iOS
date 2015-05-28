@@ -32,9 +32,8 @@ public class BaseActivity extends AppCompatActivity {
     public static final int DURATION_MILLIS = 2500;
     protected Realm realm;
     protected List<FoodItem> foodItemList;
-    protected BarChart chart1;
-    protected PieChart chart2;
-    protected BarChart chart3;
+    protected BarChart chart1, chart3;
+    protected PieChart chart2, chart4;
 
 
     @Override
@@ -89,6 +88,9 @@ public class BaseActivity extends AppCompatActivity {
         chart3 = (BarChart) findViewById(R.id.chart3);
         setupBarChart(chart3);
 
+        chart4 = (PieChart) findViewById(R.id.chart4);
+        setupPieChart(chart4);
+
     }
 
     private static void setupPieChart(PieChart chart) {
@@ -126,7 +128,7 @@ public class BaseActivity extends AppCompatActivity {
         chart.getLegend().setEnabled(false);
     }
 
-    protected void setBarData(FoodItem item) {
+    protected void setChartData(FoodItem item) {
 
         {
             float protein = getFloat(item.getMeta().getProtein());
@@ -144,41 +146,15 @@ public class BaseActivity extends AppCompatActivity {
             yVals1.add(new BarEntry(carbs, 1));
             yVals1.add(new BarEntry(fat, 2));
 
-            BarDataSet set1 = new BarDataSet(yVals1, "Data Set");
-            set1.setColors(ColorTemplate.VORDIPLOM_COLORS);
-            set1.setDrawValues(true);
-
-            ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
-            dataSets.add(set1);
-
-            BarData data = new BarData(xVals, dataSets);
-            data.setValueTextSize(10f);
-
-            chart1.setData(data);
-            chart1.invalidate();
-            chart1.animateY(DURATION_MILLIS);
-
+            setBarData(xVals, yVals1, chart1, ColorTemplate.VORDIPLOM_COLORS);
 
             ArrayList<Entry> yVals2 = new ArrayList<Entry>();
             yVals2.add(new Entry(protein * 4 / totalCal, 0));
             yVals2.add(new Entry(carbs * 4 / totalCal, 1));
             yVals2.add(new Entry(fat * 9 / totalCal, 2));
 
-            PieDataSet dataSet = new PieDataSet(yVals2, getString(R.string.cal_dist));
-            dataSet.setSliceSpace(3f);
-            dataSet.setSelectionShift(5f);
-            dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
-
-            PieData pieData = new PieData(xVals, dataSet);
-            pieData.setValueFormatter(new PercentFormatter());
-            pieData.setValueTextSize(10f);
-            pieData.setValueTextColor(Color.BLACK);
-
-            chart2.setData(pieData);
+            setPieData(xVals, yVals2, chart2, ColorTemplate.VORDIPLOM_COLORS);
             chart2.setCenterText(getFloat(item.getMeta().getEnergy()) + getString(R.string.calories));
-            chart2.highlightValues(null); //Remove all highlights
-            chart2.invalidate();
-            chart2.animateY(DURATION_MILLIS);
         }
 
 
@@ -197,24 +173,67 @@ public class BaseActivity extends AppCompatActivity {
             yVals.add(new BarEntry(potassium, 1));
             yVals.add(new BarEntry(cholesterol, 2));
 
-            BarDataSet set = new BarDataSet(yVals, "Data Set");
-            set.setColors(ColorTemplate.JOYFUL_COLORS);
-            set.setDrawValues(true);
+            setBarData(xVals, yVals, chart3, ColorTemplate.JOYFUL_COLORS);
+        }
 
-            ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
-            dataSets.add(set);
+        //Chart 4: Fat Distribution
+        {
+            float poly = getFloat(item.getMeta().getPolyunsaturatedFat());
+            float mono = getFloat(item.getMeta().getMonounsaturatedFat());
+            float sat = getFloat(item.getMeta().getSaturatedFat());
+            float total = poly + mono + sat;
 
-            BarData data = new BarData(xVals, dataSets);
-            data.setValueTextSize(10f);
 
-            chart3.setData(data);
-            chart3.invalidate();
-            chart3.animateY(DURATION_MILLIS);
+            ArrayList<String> xVals = new ArrayList<String>();
+            xVals.add("Polyunsaturated");
+            xVals.add("Monounsaturated");
+            xVals.add("Saturated");
+
+            ArrayList<Entry> yVals = new ArrayList<Entry>();
+            yVals.add(new Entry(poly / total, 0));
+            yVals.add(new Entry(mono / total, 1));
+            yVals.add(new Entry(sat / total, 2));
+
+            setPieData(xVals, yVals, chart4, ColorTemplate.LIBERTY_COLORS);
+            chart4.setCenterText(getFloat(item.getMeta().getFat()) + " g of Fat");
         }
 
 
 
 
+    }
+
+    private static void setBarData(ArrayList<String> xVals, ArrayList<BarEntry> yVals, BarChart chart, int[] colors) {
+        BarDataSet set1 = new BarDataSet(yVals, "BarSet");
+        set1.setColors(colors);
+        set1.setDrawValues(true);
+
+        ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
+        dataSets.add(set1);
+
+        BarData data = new BarData(xVals, dataSets);
+        data.setValueTextSize(10f);
+
+        chart.setData(data);
+        chart.invalidate();
+        chart.animateY(DURATION_MILLIS);
+    }
+
+    private void setPieData(ArrayList<String> xVals, ArrayList<Entry> yVals, PieChart chart, int [] colors) {
+        PieDataSet dataSet = new PieDataSet(yVals, "PieSet");
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(5f);
+        dataSet.setColors(colors);
+
+        PieData pieData = new PieData(xVals, dataSet);
+        pieData.setValueFormatter(new PercentFormatter());
+        pieData.setValueTextSize(10f);
+        pieData.setValueTextColor(Color.BLACK);
+
+        chart.setData(pieData);
+        chart.highlightValues(null); //Remove all highlights
+        chart.invalidate();
+        chart.animateY(DURATION_MILLIS);
     }
 
     protected float getFloat(String item){
