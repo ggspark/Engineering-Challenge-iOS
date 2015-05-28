@@ -12,4 +12,5 @@
     <string name="protein">Protein</string>
     <string name="carb">Carbohydrate</string>
     <string name="fat">Fat</string>
+    <string name="calories">" Calories"</string>
 </resources>

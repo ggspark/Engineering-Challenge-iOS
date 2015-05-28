@@ -80,46 +80,45 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void setupCharts() {
         chart1 = (BarChart) findViewById(R.id.chart1);
+        setupBarChart(chart1);
 
-        chart1.setDescription("");
-        chart1.setMaxVisibleValueCount(60);
-        // scaling can now only be done on x- and y-axis separately
-        chart1.setPinchZoom(false);
-        chart1.setDrawBarShadow(false);
-        chart1.setDrawGridBackground(false);
-        chart1.setScaleEnabled(false);
-        chart1.setDoubleTapToZoomEnabled(false);
-        chart1.setHighlightEnabled(false);
+        chart2 = (PieChart) findViewById(R.id.chart2);
+        setupPieChart(chart2);
+    }
 
-        XAxis xAxis = chart1.getXAxis();
+    private static void setupPieChart(PieChart chart) {
+        chart.setUsePercentValues(true);
+        chart.setDescription("");
+        chart.setDragDecelerationFrictionCoef(0.95f);
+        chart.setDrawHoleEnabled(true);
+        chart.setHoleColorTransparent(true);
+        chart.setTransparentCircleColor(Color.WHITE);
+        chart.setHoleRadius(65f);
+        chart.setTransparentCircleRadius(68f);
+        chart.setDrawCenterText(true);
+        chart.setRotationAngle(0);
+        // enable rotation of the chart by touch
+        chart.setRotationEnabled(true);
+        chart.getLegend().setEnabled(false);
+    }
+
+    private static void setupBarChart(BarChart chart) {
+        chart.setDescription("");
+        chart.setMaxVisibleValueCount(60);
+        chart.setPinchZoom(false);
+        chart.setDrawBarShadow(false);
+        chart.setDrawGridBackground(false);
+        chart.setScaleEnabled(false);
+        chart.setDoubleTapToZoomEnabled(false);
+        chart.setHighlightEnabled(false);
+
+        XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setSpaceBetweenLabels(0);
         xAxis.setDrawGridLines(false);
 
-        chart1.getAxisLeft().setDrawGridLines(false);
-        // add a nice and smooth animation
-        chart1.animateY(2500);
-        chart1.getLegend().setEnabled(false);
-
-
-
-
-
-        chart2 = (PieChart) findViewById(R.id.chart2);
-        chart2.setUsePercentValues(true);
-        chart2.setDescription("");
-        chart2.setDragDecelerationFrictionCoef(0.95f);
-        chart2.setDrawHoleEnabled(true);
-        chart2.setHoleColorTransparent(true);
-        chart2.setTransparentCircleColor(Color.WHITE);
-        chart2.setHoleRadius(65f);
-        chart2.setTransparentCircleRadius(68f);
-        chart2.setDrawCenterText(true);
-        chart2.setRotationAngle(0);
-        // enable rotation of the chart by touch
-        chart2.setRotationEnabled(true);
-        chart2.setCenterText(getString(R.string.cal_dist));
-        chart2.getLegend().setEnabled(false);
+        chart.getAxisLeft().setDrawGridLines(false);
+        chart.getLegend().setEnabled(false);
     }
 
     protected void setBarData(FoodItem item) {
@@ -151,7 +150,6 @@ public class BaseActivity extends AppCompatActivity {
 
         chart1.setData(data);
         chart1.invalidate();
-        // add a nice and smooth animation
         chart1.animateY(DURATION_MILLIS);
 
 
@@ -163,7 +161,7 @@ public class BaseActivity extends AppCompatActivity {
         ArrayList<Entry> yVals2 = new ArrayList<Entry>();
         yVals2.add(new Entry(protein*4/totalCal, 0));
         yVals2.add(new Entry(carbs*4/totalCal, 1));
-        yVals2.add(new Entry(fat*9/totalCal, 2));
+        yVals2.add(new Entry(fat * 9 / totalCal, 2));
 
         PieDataSet dataSet = new PieDataSet(yVals2, getString(R.string.cal_dist));
         dataSet.setSliceSpace(3f);
@@ -174,11 +172,10 @@ public class BaseActivity extends AppCompatActivity {
         pieData.setValueFormatter(new PercentFormatter());
         pieData.setValueTextSize(10f);
         pieData.setValueTextColor(Color.BLACK);
+
         chart2.setData(pieData);
-
-        // undo all highlights
-        chart2.highlightValues(null);
-
+        chart2.setCenterText(getFloat(item.getMeta().getEnergy()) + getString(R.string.calories));
+        chart2.highlightValues(null); //Remove all highlights
         chart2.invalidate();
         chart2.animateY(DURATION_MILLIS);
 
