@@ -13,37 +13,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:orientation="vertical">
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/chart1"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="@dimen/graph_height"/>
 
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/chart2"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="@dimen/graph_height"/>
 
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/chart3"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="@dimen/graph_height"/>
 
 
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/chart4"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="@dimen/graph_height"/>
 
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/chart5"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/graph_height"
                 android:visibility="gone"/>
 
         </LinearLayout>
