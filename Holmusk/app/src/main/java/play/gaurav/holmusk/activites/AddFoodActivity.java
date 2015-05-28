@@ -100,16 +100,11 @@ public class AddFoodActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.save) {
             if(selectedItem != null)
             {
-
                 Realm realm = Realm.getInstance(this);
                 try {
                     // Copy the object to Realm. Any further changes must happen on realmUser
@@ -118,10 +113,10 @@ public class AddFoodActivity extends BaseActivity {
                     FoodItem saveItem = realm.copyToRealm(selectedItem);
                     realm.commitTransaction();
                     long end = System.currentTimeMillis();
-                    Toast.makeText(this, "Time taken to save data = " + (end - begin) + " ms", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.time_log) + (end - begin) + " ms", Toast.LENGTH_LONG).show();
                 }catch (RealmException e){
                     realm.commitTransaction();
-                    Toast.makeText(this, "Item already exists", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.item_exists), Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     realm.commitTransaction();
                     e.printStackTrace();

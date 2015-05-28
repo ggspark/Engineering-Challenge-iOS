@@ -5,4 +5,11 @@
     <string name="add_food">Add Food</string>
     <string name="title_activity_add_food">Add Food</string>
     <string name="hello_world">Hello world!</string>
+    <string name="enter_food_name">Enter food name</string>
+    <string name="time_log">"Realm write time = "</string>
+    <string name="item_exists">Item already exists</string>
+    <string name="cal_dist">Calorie Distribution</string>
+    <string name="protein">Protein</string>
+    <string name="carb">Carbohydrate</string>
+    <string name="fat">Fat</string>
 </resources>
