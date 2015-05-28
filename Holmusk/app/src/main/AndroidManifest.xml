@@ -22,7 +22,7 @@
 
         <activity
             android:name=".activites.AddFoodActivity"
-            android:windowSoftInputMode="adjustNothing"
+            android:windowSoftInputMode="stateVisible|adjustNothing"
             android:screenOrientation="portrait">
         </activity>
     </application>

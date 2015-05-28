@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
@@ -14,7 +16,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 import play.gaurav.holmusk.R;
 import play.gaurav.holmusk.adapters.CustomArrayAdapter;
@@ -35,6 +36,22 @@ public class MainActivity extends BaseActivity {
         adapter = new CustomArrayAdapter(this, R.layout.simple_list_item);
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                long begin = System.currentTimeMillis();
+                realm.beginTransaction();
+                foodItemList.get(i).removeFromRealm();
+                realm.commitTransaction();
+                long end = System.currentTimeMillis();
+                Toast.makeText(MainActivity.this,"Realm delete time = "+ (end - begin) + " ms", Toast.LENGTH_LONG).show();
+
+                refresh();
+            }
+        });
+
+
     }
 
     @Override
@@ -49,10 +66,18 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        realm = Realm.getInstance(this);
+        refresh();
+    }
+
+    private void refresh() {
+        long begin = System.currentTimeMillis();
         RealmResults<FoodItem> result = realm.allObjects(FoodItem.class);
+        long end = System.currentTimeMillis();
+        Toast.makeText(MainActivity.this, "Realm query time = " + (end - begin) + " ms", Toast.LENGTH_LONG).show();
+
         foodItemList = new ArrayList<FoodItem>(result);
 
+        adapter.clear();
         for(FoodItem item : foodItemList)
             adapter.add(item.getName());
         adapter.notifyDataSetChanged();
@@ -60,7 +85,6 @@ public class MainActivity extends BaseActivity {
         FoodItem totalItem = aggregate(foodItemList);
         setChartData(totalItem);
         setFibreChart(totalItem);
-
     }
 
     private void setFibreChart(FoodItem totalItem){

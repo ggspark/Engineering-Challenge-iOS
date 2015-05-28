@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.exceptions.RealmException;
 import play.gaurav.holmusk.R;
 import play.gaurav.holmusk.adapters.CustomArrayAdapter;
@@ -79,11 +78,13 @@ public class AddFoodActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 setChartData(selectedItem = foodItemList.get(i));
-                InputMethodManager imm = (InputMethodManager)getSystemService(
+                InputMethodManager imm = (InputMethodManager) getSystemService(
                         Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(searchBox.getWindowToken(), 0);
             }
         });
+
+        searchBox.requestFocus();
 
 
     }
@@ -102,7 +103,6 @@ public class AddFoodActivity extends BaseActivity {
         if (id == R.id.save) {
             if(selectedItem != null)
             {
-                realm = Realm.getInstance(this);
                 try {
                     // Copy the object to Realm. Any further changes must happen on realmUser
                     long begin = System.currentTimeMillis();

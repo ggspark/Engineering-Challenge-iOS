@@ -12,11 +12,10 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/graph_height"
+        android:layout_height="150dp"
         android:layout_alignParentTop="true"
-        >
+        />
 
-    </ListView>
 
     <include
         layout="@layout/view_graph"

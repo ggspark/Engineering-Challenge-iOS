@@ -42,6 +42,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(NAV_TAG, "Class:" + ((Object) this).getClass().getSimpleName() + " Method:onCreate");
         super.onCreate(savedInstanceState);
+        realm = Realm.getInstance(this);
     }
 
     @Override
