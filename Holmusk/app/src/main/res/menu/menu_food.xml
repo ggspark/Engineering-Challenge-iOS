@@ -1,9 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="play.gaurav.holmusk.EditProfileActivity">
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
+      tools:context="play.gaurav.holmusk.activites.MainActivity">
+    <item android:id="@+id/save"
+          android:title="@string/save"
           android:orderInCategory="100"
-          app:showAsAction="never"/>
+          app:showAsAction="ifRoom|withText"/>
 </menu>

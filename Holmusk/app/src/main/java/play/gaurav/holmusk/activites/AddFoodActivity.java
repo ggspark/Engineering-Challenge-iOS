@@ -1,8 +1,7 @@
-package play.gaurav.holmusk;
+package play.gaurav.holmusk.activites;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,16 +13,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
-
-import java.util.ArrayList;
 import java.util.List;
 
+import play.gaurav.holmusk.R;
+import play.gaurav.holmusk.adapters.CustomArrayAdapter;
 import play.gaurav.holmusk.controller.APIServices;
 import play.gaurav.holmusk.models.FoodItem;
 import retrofit.Callback;
@@ -31,12 +24,10 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class AddFoodActivity extends ActionBarActivity {
+public class AddFoodActivity extends BaseActivity {
 
     AutoCompleteTextView searchBox;
     ArrayAdapter<String> adapter;
-    List<FoodItem> foodItemList;
-    private BarChart mChart;
 
 
     @Override
@@ -46,27 +37,8 @@ public class AddFoodActivity extends ActionBarActivity {
         searchBox = (AutoCompleteTextView) findViewById(R.id.search_box);
         adapter = new CustomArrayAdapter(this, android.R.layout.simple_dropdown_item_1line);
         searchBox.setAdapter(adapter);
-        mChart = (BarChart) findViewById(R.id.chart1);
 
-        mChart.setDescription("");
-        mChart.setMaxVisibleValueCount(60);
-        // scaling can now only be done on x- and y-axis separately
-        mChart.setPinchZoom(false);
-        mChart.setDrawBarShadow(false);
-        mChart.setDrawGridBackground(false);
-        mChart.setScaleEnabled(false);
-        mChart.setDoubleTapToZoomEnabled(false);
-        mChart.setHighlightEnabled(false);
-
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setSpaceBetweenLabels(0);
-        xAxis.setDrawGridLines(false);
-
-        mChart.getAxisLeft().setDrawGridLines(false);
-        // add a nice and smooth animation
-        mChart.animateY(2500);
-        mChart.getLegend().setEnabled(false);
+        setupCharts();
 
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
@@ -115,37 +87,10 @@ public class AddFoodActivity extends ActionBarActivity {
 
     }
 
-    private void setBarData(FoodItem item) {
-
-        ArrayList<String> xVals = new ArrayList<String>();
-        xVals.add("Protein");
-        xVals.add("Carbohydrate");
-        xVals.add("Fat");
-
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-        yVals1.add(new BarEntry(Float.parseFloat(item.getMeta().getProtein().substring(0, item.getMeta().getProtein().length() - 2)), 0));
-        yVals1.add(new BarEntry(Float.parseFloat(item.getMeta().getCarbohydrate().substring(0, item.getMeta().getCarbohydrate().length() - 2)), 1));
-        yVals1.add(new BarEntry(Float.parseFloat(item.getMeta().getFat().substring(0, item.getMeta().getFat().length() - 2)), 2));
-
-        BarDataSet set1 = new BarDataSet(yVals1, "Data Set");
-        set1.setColors(ColorTemplate.VORDIPLOM_COLORS);
-        set1.setDrawValues(true);
-
-        ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
-        dataSets.add(set1);
-
-        BarData data = new BarData(xVals, dataSets);
-
-        mChart.setData(data);
-        mChart.invalidate();
-        // add a nice and smooth animation
-        mChart.animateY(2500);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
+        // Inflate the menu_main; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_food, menu);
         return true;
     }
 
@@ -157,7 +102,7 @@ public class AddFoodActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.save) {
             return true;
         }
 

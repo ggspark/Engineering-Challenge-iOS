@@ -1,4 +1,4 @@
-package play.gaurav.holmusk;
+package play.gaurav.holmusk.adapters;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
@@ -15,7 +15,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
 
     List<String> items;
 
-    CustomArrayAdapter(Context context, int id){
+    public CustomArrayAdapter(Context context, int id){
         super(context,id);
         items = new ArrayList<String>();
     }
