@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
@@ -16,18 +17,24 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import play.gaurav.holmusk.R;
+import play.gaurav.holmusk.adapters.CustomArrayAdapter;
 import play.gaurav.holmusk.models.FoodItem;
 import play.gaurav.holmusk.models.Meta;
 
 
 public class MainActivity extends BaseActivity {
 
+    ListView listView;
     PieChart chart5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupCharts();
+        listView = (ListView) findViewById(R.id.listView);
+        adapter = new CustomArrayAdapter(this, R.layout.simple_list_item);
+        listView.setAdapter(adapter);
+
     }
 
     @Override
@@ -45,6 +52,11 @@ public class MainActivity extends BaseActivity {
         realm = Realm.getInstance(this);
         RealmResults<FoodItem> result = realm.allObjects(FoodItem.class);
         foodItemList = new ArrayList<FoodItem>(result);
+
+        for(FoodItem item : foodItemList)
+            adapter.add(item.getName());
+        adapter.notifyDataSetChanged();
+
         FoodItem totalItem = aggregate(foodItemList);
         setChartData(totalItem);
         setFibreChart(totalItem);

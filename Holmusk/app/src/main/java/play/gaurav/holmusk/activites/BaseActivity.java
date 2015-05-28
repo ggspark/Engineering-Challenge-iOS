@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -32,6 +33,7 @@ public class BaseActivity extends AppCompatActivity {
     public static final int DURATION_MILLIS = 2500;
     protected Realm realm;
     protected List<FoodItem> foodItemList;
+    protected ArrayAdapter<String> adapter;
     protected BarChart chart1, chart3;
     protected PieChart chart2, chart4;
 

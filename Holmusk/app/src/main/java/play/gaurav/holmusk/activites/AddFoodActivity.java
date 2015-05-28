@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
@@ -30,7 +29,6 @@ import retrofit.client.Response;
 public class AddFoodActivity extends BaseActivity {
 
     AutoCompleteTextView searchBox;
-    ArrayAdapter<String> adapter;
     FoodItem selectedItem;
 
 
@@ -38,11 +36,10 @@ public class AddFoodActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_food);
+        setupCharts();
         searchBox = (AutoCompleteTextView) findViewById(R.id.search_box);
         adapter = new CustomArrayAdapter(this, android.R.layout.simple_dropdown_item_1line);
         searchBox.setAdapter(adapter);
-
-        setupCharts();
 
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
