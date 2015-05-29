@@ -60,11 +60,11 @@ public class MainActivity extends BaseActivity {
 
         chart5 = (PieChart) findViewById(R.id.chart5);
         setupPieChart(chart5);
-        chart5.setVisibility(View.VISIBLE);
+        findViewById(R.id.fibre_container).setVisibility(View.VISIBLE);
 
         chart6 = (PieChart) findViewById(R.id.chart6);
         setupPieChart(chart6);
-        chart6.setVisibility(View.VISIBLE);
+        findViewById(R.id.sugar_container).setVisibility(View.VISIBLE);
     }
 
     @Override

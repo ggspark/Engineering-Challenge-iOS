@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/graph_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
+        android:layout_marginTop="5dp"
         android:text="@string/nutrition"
         android:textSize="@dimen/nutrition_heading"/>
 
@@ -126,13 +127,15 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/fibre_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/chart_margin"
                 android:layout_marginTop="@dimen/chart_margin"
                 android:background="@color/chart_bg"
                 android:orientation="vertical"
-                android:padding="@dimen/chart_padding">
+                android:padding="@dimen/chart_padding"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -145,18 +148,19 @@
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/chart5"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/graph_height"
-                    android:visibility="gone"/>
+                    android:layout_height="@dimen/graph_height"/>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/sugar_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/chart_margin"
                 android:layout_marginTop="@dimen/chart_margin"
                 android:background="@color/chart_bg"
                 android:orientation="vertical"
-                android:padding="@dimen/chart_padding">
+                android:padding="@dimen/chart_padding"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,8 +173,7 @@
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/chart6"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/graph_height"
-                    android:visibility="gone"/>
+                    android:layout_height="@dimen/graph_height"/>
 
             </LinearLayout>
 

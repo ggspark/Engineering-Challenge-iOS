@@ -14,4 +14,5 @@
     <string name="fat">Fat</string>
     <string name="calories">" Calories"</string>
     <string name="nutrition">Nutrition</string>
+    <string name="food_items">Food Items</string>
 </resources>
