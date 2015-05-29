@@ -41,6 +41,8 @@ You'll need to build an app that is able to retrieve nutrition information for d
 
 At Holmusk we do our best to go the extra mile and as such you would recieve brownie points if 
 * your app provides simple analytics such as keeping track of a users diet for the day and providing relevant graphs, animations etc.
-* you use Realm instead of SQlite
+* you use Realm(http://realm.io) for Data storing
+* you use Retrofit(http://square.github.io/retrofit) for Network calls
+* you use Picasso(http://square.github.io/picasso) for Image rendering
 * you create at least one custom View by extending View class or any of its subclasses
 * you use  Kimono's API builer (https://www.kimonolabs.com) to extract food related data from MyfitnessPal (https://www.myfitnesspal.com), FatSecrets (http://www.fatsecret.com.sg) or other food websites such as CalorieKing (http://www.calorieking.com).
