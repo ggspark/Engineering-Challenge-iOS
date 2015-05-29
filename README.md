@@ -14,7 +14,9 @@ This is the Holmusk Android developer challenge. The rules of the challenge are 
 * You are required to code in Java
 * You will be able to submit the challenge anytime you are ready provided the challenge is still open
 * Your code should be commented
+* Your app should have targetSdkVersion 22 and should support minSdkVersion 16 (the lower the better but min 16 is a must)
 * You should implement your app support *all* Android mobile sizes. Only one orientation is enough - we're not too fiesty on that
+* You should use Android Studio IDE and gradle based project structure
 * Because we, at Holmusk, take code organization seriously, please do ensure your source files are organized when you submit. Please do ensure that, at the minimum, you follow MVC and your code organization reflects that.
 * You are required to fork this repo and submit a pull request
 * If you wish to not make public, your submission, please complete the code in your local repository and email a patch file to careers@holmusk.com
