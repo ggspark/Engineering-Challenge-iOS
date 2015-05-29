@@ -27,11 +27,13 @@ public class MainActivity extends BaseActivity {
 
     ListView listView;
     PieChart chart5, chart6;
+    View chartContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupCharts();
+        chartContainer= findViewById(R.id.graph_container);
         listView = (ListView) findViewById(R.id.listView);
         adapter = new CustomArrayAdapter(this, R.layout.simple_list_item);
         listView.setAdapter(adapter);
@@ -79,15 +81,21 @@ public class MainActivity extends BaseActivity {
         long end = System.currentTimeMillis();
         Toast.makeText(MainActivity.this, "Realm query time = " + (end - begin) + " ms", Toast.LENGTH_LONG).show();
 
-        foodItemList = new ArrayList<FoodItem>(result);
 
-        adapter.clear();
-        for(FoodItem item : foodItemList)
-            adapter.add(item.getName());
-        adapter.notifyDataSetChanged();
+        if(result.size()>0) {
+            chartContainer.setVisibility(View.VISIBLE);
+            foodItemList = new ArrayList<FoodItem>(result);
 
-        FoodItem totalItem = aggregate(foodItemList);
-        setChartData(totalItem);
+            adapter.clear();
+            for (FoodItem item : foodItemList)
+                adapter.add(item.getName());
+            adapter.notifyDataSetChanged();
+
+            FoodItem totalItem = aggregate(foodItemList);
+            setChartData(totalItem);
+        }else{
+            chartContainer.setVisibility(View.GONE);
+        }
 
     }
 

@@ -29,6 +29,7 @@ public class AddFoodActivity extends BaseActivity {
 
     AutoCompleteTextView searchBox;
     FoodItem selectedItem;
+    View chartContainer;
 
 
     @Override
@@ -39,7 +40,8 @@ public class AddFoodActivity extends BaseActivity {
         searchBox = (AutoCompleteTextView) findViewById(R.id.search_box);
         adapter = new CustomArrayAdapter(this, android.R.layout.simple_dropdown_item_1line);
         searchBox.setAdapter(adapter);
-
+        chartContainer = findViewById(R.id.graph_container);
+        chartContainer.setVisibility(View.GONE);
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -77,7 +79,11 @@ public class AddFoodActivity extends BaseActivity {
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                setChartData(selectedItem = foodItemList.get(i));
+                selectedItem = foodItemList.get(i);
+                if(selectedItem!=null) {
+                    chartContainer.setVisibility(View.VISIBLE);
+                    setChartData(selectedItem);
+                }
                 InputMethodManager imm = (InputMethodManager) getSystemService(
                         Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(searchBox.getWindowToken(), 0);
