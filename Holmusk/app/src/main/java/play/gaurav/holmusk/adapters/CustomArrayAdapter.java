@@ -15,8 +15,8 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
 
     List<String> items;
 
-    public CustomArrayAdapter(Context context, int id){
-        super(context,id);
+    public CustomArrayAdapter(Context context, int id) {
+        super(context, id);
         items = new ArrayList<String>();
     }
 

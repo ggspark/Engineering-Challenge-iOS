@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,7 +56,6 @@ public class AddFoodActivity extends BaseActivity {
                         adapter.clear();
                         for (FoodItem item : foodItems) {
                             adapter.add(item.getName());
-                            Log.d("Item", item.getName());
                         }
                         foodItemList = foodItems;
                         adapter.notifyDataSetChanged();
@@ -65,7 +63,7 @@ public class AddFoodActivity extends BaseActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.e("Error", "Error in fetching API");
+                        error.printStackTrace();
                     }
                 });
             }
@@ -80,7 +78,7 @@ public class AddFoodActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedItem = foodItemList.get(i);
-                if(selectedItem!=null) {
+                if (selectedItem != null) {
                     chartContainer.setVisibility(View.VISIBLE);
                     setChartData(selectedItem);
                 }
@@ -94,9 +92,10 @@ public class AddFoodActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(this.getIntent().getBooleanExtra("Empty", false)) {
-            Toast.makeText(this, "You cannot go back without adding food", Toast.LENGTH_LONG).show();
-        }else{
+        if (this.getIntent().getBooleanExtra("Empty", false)) {
+            Toast.makeText(this, getString(R.string.cannot_back), Toast.LENGTH_SHORT).show();
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -113,8 +112,7 @@ public class AddFoodActivity extends BaseActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.save) {
-            if(selectedItem != null)
-            {
+            if (selectedItem != null) {
                 try {
                     // Copy the object to Realm. Any further changes must happen on realmUser
                     long begin = System.currentTimeMillis();
@@ -123,10 +121,10 @@ public class AddFoodActivity extends BaseActivity {
                     realm.commitTransaction();
                     long end = System.currentTimeMillis();
                     Toast.makeText(this, getString(R.string.time_log) + (end - begin) + " ms", Toast.LENGTH_LONG).show();
-                }catch (RealmException e){
+                } catch (RealmException e) {
                     realm.commitTransaction();
                     Toast.makeText(this, getString(R.string.item_exists), Toast.LENGTH_SHORT).show();
-                }catch (Exception e){
+                } catch (Exception e) {
                     realm.commitTransaction();
                     e.printStackTrace();
                 }

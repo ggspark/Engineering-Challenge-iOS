@@ -167,9 +167,9 @@ public class BaseActivity extends AppCompatActivity {
             float cholesterol = getFloat(item.getMeta().getCholesterol());
 
             ArrayList<String> xVals = new ArrayList<String>();
-            xVals.add("Sodium");
-            xVals.add("Potassium");
-            xVals.add("Cholesterol");
+            xVals.add(getString(R.string.soduim));
+            xVals.add(getString(R.string.potassium));
+            xVals.add(getString(R.string.cholestrol));
 
             ArrayList<BarEntry> yVals = new ArrayList<BarEntry>();
             yVals.add(new BarEntry(sodium, 0));
@@ -188,9 +188,9 @@ public class BaseActivity extends AppCompatActivity {
 
 
             ArrayList<String> xVals = new ArrayList<String>();
-            xVals.add("Polyunsaturated");
-            xVals.add("Monounsaturated");
-            xVals.add("Saturated");
+            xVals.add(getString(R.string.poly));
+            xVals.add(getString(R.string.mono));
+            xVals.add(getString(R.string.sat));
 
             ArrayList<Entry> yVals = new ArrayList<Entry>();
             yVals.add(new Entry(poly / total, 0));
@@ -200,8 +200,6 @@ public class BaseActivity extends AppCompatActivity {
             setPieData(xVals, yVals, chart4, ColorTemplate.LIBERTY_COLORS);
             chart4.setCenterText(getFloat(item.getMeta().getFat()) + " g of Fat");
         }
-
-
 
 
     }
@@ -239,14 +237,13 @@ public class BaseActivity extends AppCompatActivity {
         chart.animateY(DURATION_MILLIS);
     }
 
-    protected float getFloat(String item){
-        if(item==null)
+    protected float getFloat(String item) {
+        if (item == null)
             return 0;
         try {
             StringTokenizer st = new StringTokenizer(item);
             return Float.parseFloat(st.nextToken());
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return 0;
         }
     }

@@ -94,8 +94,9 @@ public class MainActivity extends BaseActivity {
                 item.measure(0, 0);
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) (4.7 * item.getMeasuredHeight()));
                 listView.setLayoutParams(params);
-            }else{
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+            }
+            else {
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 listView.setLayoutParams(params);
             }
 
@@ -127,7 +128,7 @@ public class MainActivity extends BaseActivity {
                 yVals.add(new Entry(fibre / total, index++));
             }
             setPieData(xVals, yVals, chart5, ColorTemplate.COLORFUL_COLORS);
-            chart5.setCenterText(getFloat(item.getMeta().getFibre()) + " g of Fibre");
+            chart5.setCenterText(getFloat(item.getMeta().getFibre()) + getString(R.string.g_fibre));
         }
 
         //Chart 6: Sugar Distribution
@@ -144,7 +145,7 @@ public class MainActivity extends BaseActivity {
                 yVals.add(new Entry(sugar / total, index++));
             }
             setPieData(xVals, yVals, chart6, ColorTemplate.JOYFUL_COLORS);
-            chart6.setCenterText(getFloat(item.getMeta().getSugar()) + " g of Sugar");
+            chart6.setCenterText(getFloat(item.getMeta().getSugar()) + getString(R.string.g_sugar));
         }
 
     }

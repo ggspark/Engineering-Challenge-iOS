@@ -15,4 +15,13 @@
     <string name="calories">" Calories"</string>
     <string name="nutrition">Nutrition</string>
     <string name="food_items">Food Items</string>
+    <string name="cannot_back">You cannot go back without adding food</string>
+    <string name="soduim">Sodium</string>
+    <string name="potassium">Potassium</string>
+    <string name="cholestrol">Cholesterol</string>
+    <string name="poly">Polyunsaturated</string>
+    <string name="mono">Monounsaturated</string>
+    <string name="sat">Saturated</string>
+    <string name="g_fibre">" g of Fibre"</string>
+    <string name="g_sugar">" g of Sugar"</string>
 </resources>
