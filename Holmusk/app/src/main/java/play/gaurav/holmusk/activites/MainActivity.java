@@ -26,7 +26,7 @@ import play.gaurav.holmusk.models.Meta;
 public class MainActivity extends BaseActivity {
 
     ListView listView;
-    PieChart chart5;
+    PieChart chart5, chart6;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity {
                 foodItemList.get(i).removeFromRealm();
                 realm.commitTransaction();
                 long end = System.currentTimeMillis();
-                Toast.makeText(MainActivity.this,"Realm delete time = "+ (end - begin) + " ms", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Realm delete time = " + (end - begin) + " ms", Toast.LENGTH_LONG).show();
 
                 refresh();
             }
@@ -61,6 +61,10 @@ public class MainActivity extends BaseActivity {
         chart5 = (PieChart) findViewById(R.id.chart5);
         setupPieChart(chart5);
         chart5.setVisibility(View.VISIBLE);
+
+        chart6 = (PieChart) findViewById(R.id.chart6);
+        setupPieChart(chart6);
+        chart6.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -84,27 +88,48 @@ public class MainActivity extends BaseActivity {
 
         FoodItem totalItem = aggregate(foodItemList);
         setChartData(totalItem);
-        setFibreChart(totalItem);
+
     }
 
-    private void setFibreChart(FoodItem totalItem){
-
+    @Override
+    protected void setChartData(FoodItem item) {
+        super.setChartData(item);
         //Chart 5: Fibre Distribution
         {
             ArrayList<String> xVals = new ArrayList<String>();
             ArrayList<Entry> yVals = new ArrayList<Entry>();
             int index = 0;
-            for(FoodItem item : foodItemList){
-                float fibre = getFloat(item.getMeta().getFibre());
-                float total = getFloat(totalItem.getMeta().getFibre());
-                xVals.add(item.getName());
+            for(FoodItem foodItem : foodItemList){
+                float fibre = getFloat(foodItem.getMeta().getFibre());
+                float total = getFloat(item.getMeta().getFibre());
+                if(fibre<=0)
+                    continue;
+                xVals.add(foodItem.getName());
                 yVals.add(new Entry(fibre/total, index++));
             }
             setPieData(xVals, yVals, chart5, ColorTemplate.COLORFUL_COLORS);
-            chart5.setCenterText(getFloat(totalItem.getMeta().getFibre()) + " g of Fibre");
+            chart5.setCenterText(getFloat(item.getMeta().getFibre()) + " g of Fibre");
+        }
+
+        //Chart 6: Sugar Distribution
+        {
+            ArrayList<String> xVals = new ArrayList<String>();
+            ArrayList<Entry> yVals = new ArrayList<Entry>();
+            int index = 0;
+            for(FoodItem foodItem : foodItemList){
+                float sugar = getFloat(foodItem.getMeta().getSugar());
+                float total = getFloat(item.getMeta().getSugar());
+                if(sugar<=0)
+                    continue;
+                xVals.add(foodItem.getName());
+                yVals.add(new Entry(sugar/total, index++));
+            }
+            setPieData(xVals, yVals, chart6, ColorTemplate.JOYFUL_COLORS);
+            chart6.setCenterText(getFloat(item.getMeta().getSugar()) + " g of Sugar");
         }
 
     }
+
 
     private FoodItem aggregate(List<FoodItem> foodItemList){
         FoodItem total = new FoodItem();

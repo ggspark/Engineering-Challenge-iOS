@@ -48,6 +48,12 @@
                 android:layout_height="@dimen/graph_height"
                 android:visibility="gone"/>
 
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/chart6"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/graph_height"
+                android:visibility="gone"/>
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
