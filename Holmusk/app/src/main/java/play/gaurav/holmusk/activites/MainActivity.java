@@ -43,17 +43,21 @@ public class MainActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Delete FoodItem from Realm Database with benchmarking
                 long begin = System.currentTimeMillis();
                 realm.beginTransaction();
                 foodItemList.get(i).removeFromRealm();
                 realm.commitTransaction();
                 long end = System.currentTimeMillis();
                 Toast.makeText(MainActivity.this, "Realm delete time = " + (end - begin) + " ms", Toast.LENGTH_LONG).show();
-                refresh();
+                refresh(); //Preform refresh on every remove
             }
         });
     }
 
+    /**
+     * Override setupCharts in BaseActivity to extend additional features of this activity
+     */
     @Override
     protected void setupCharts() {
         super.setupCharts();
@@ -70,23 +74,27 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        refresh();
+        refresh();//Preform refresh everytime the screen comes into view
     }
 
+    /**
+     * Method the query realm and update the views and graphs
+     */
     private void refresh() {
+        //Query Realm with benchmarking
         long begin = System.currentTimeMillis();
         RealmResults<FoodItem> result = realm.allObjects(FoodItem.class);
         long end = System.currentTimeMillis();
         Toast.makeText(MainActivity.this, "Realm query time = " + (end - begin) + " ms", Toast.LENGTH_LONG).show();
 
-
+        //Clear adapter and repopulate with the query results
         adapter.clear();
         if (result.size() > 0) {
-            chartContainer.setVisibility(View.VISIBLE);
-            foodItemList = new ArrayList<FoodItem>(result);
+            chartContainer.setVisibility(View.VISIBLE); //Set charts to visble
+            foodItemList = new ArrayList<FoodItem>(result);//populate foodItemList
 
             for (FoodItem item : foodItemList)
-                adapter.add(item.getName());
+                adapter.add(item.getName());//Populate adapter with item names
 
             //Limit the height of list view to 3
             if (adapter.getCount() > 3) {
@@ -100,20 +108,22 @@ public class MainActivity extends BaseActivity {
                 listView.setLayoutParams(params);
             }
 
+            //Find the sum of all the food items in list and render chart data
             FoodItem totalItem = aggregate(foodItemList);
             setChartData(totalItem);
         }
-        else {
+        else {//If query results are empty open AddFoodActivity with a flag that results are empty
             startActivity(new Intent(this, AddFoodActivity.class).putExtra("Empty", true));
             chartContainer.setVisibility(View.GONE);
         }
-        adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged(); //Notify that adapter data has changed
 
     }
 
     @Override
     protected void setChartData(FoodItem item) {
-        super.setChartData(item);
+        super.setChartData(item);//Setup previous 4 common charts in BaseActivity
+
         //Chart 5: Fibre Distribution
         {
             ArrayList<String> xVals = new ArrayList<String>();
@@ -122,7 +132,7 @@ public class MainActivity extends BaseActivity {
             for (FoodItem foodItem : foodItemList) {
                 float fibre = getFloat(foodItem.getMeta().getFibre());
                 float total = getFloat(item.getMeta().getFibre());
-                if (fibre <= 0)
+                if (fibre <= 0) //Don't include the result if value is less than 0
                     continue;
                 xVals.add(foodItem.getName());
                 yVals.add(new Entry(fibre / total, index++));
@@ -139,7 +149,7 @@ public class MainActivity extends BaseActivity {
             for (FoodItem foodItem : foodItemList) {
                 float sugar = getFloat(foodItem.getMeta().getSugar());
                 float total = getFloat(item.getMeta().getSugar());
-                if (sugar <= 0)
+                if (sugar <= 0) //Don't include the result if value is less than 0
                     continue;
                 xVals.add(foodItem.getName());
                 yVals.add(new Entry(sugar / total, index++));
@@ -150,7 +160,11 @@ public class MainActivity extends BaseActivity {
 
     }
 
-
+    /**
+     * Find the sum of all the items in the list
+     * @param foodItemList
+     * @return FoodItem containing sum of all the food items
+     */
     private FoodItem aggregate(List<FoodItem> foodItemList) {
         FoodItem total = new FoodItem();
         total.setName("total");
@@ -184,12 +198,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //Start AddFoodActivity if Add Food is clicked
         if (id == R.id.add_food) {
             startActivity(new Intent(this, AddFoodActivity.class));
             return true;
