@@ -17,19 +17,25 @@
         android:text="@string/food_items"
         android:textSize="@dimen/nutrition_heading"/>
 
-    <ListView
-        android:id="@+id/listView"
+    <RelativeLayout
+        android:id="@+id/listView_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_below="@id/food_label"
-        />
+        android:layout_below="@id/food_label">
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
 
 
     <include
         layout="@layout/view_graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/listView"/>
+        android:layout_below="@id/listView_container"/>
 </RelativeLayout>

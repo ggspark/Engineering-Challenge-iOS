@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -28,12 +29,13 @@ public class MainActivity extends BaseActivity {
     ListView listView;
     PieChart chart5, chart6;
     View chartContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupCharts();
-        chartContainer= findViewById(R.id.graph_container);
+        chartContainer = findViewById(R.id.graph_container);
         listView = (ListView) findViewById(R.id.listView);
         adapter = new CustomArrayAdapter(this, R.layout.simple_list_item);
         listView.setAdapter(adapter);
@@ -79,16 +81,28 @@ public class MainActivity extends BaseActivity {
 
 
         adapter.clear();
-        if(result.size()>0) {
+        if (result.size() > 0) {
             chartContainer.setVisibility(View.VISIBLE);
             foodItemList = new ArrayList<FoodItem>(result);
 
             for (FoodItem item : foodItemList)
                 adapter.add(item.getName());
 
+            //Limit the height of list view to 3
+            if (adapter.getCount() > 3) {
+                View item = adapter.getView(0, null, listView);
+                item.measure(0, 0);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) (4.7 * item.getMeasuredHeight()));
+                listView.setLayoutParams(params);
+            }else{
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+                listView.setLayoutParams(params);
+            }
+
             FoodItem totalItem = aggregate(foodItemList);
             setChartData(totalItem);
-        }else{
+        }
+        else {
             startActivity(new Intent(this, AddFoodActivity.class).putExtra("Empty", true));
             chartContainer.setVisibility(View.GONE);
         }
@@ -104,13 +118,13 @@ public class MainActivity extends BaseActivity {
             ArrayList<String> xVals = new ArrayList<String>();
             ArrayList<Entry> yVals = new ArrayList<Entry>();
             int index = 0;
-            for(FoodItem foodItem : foodItemList){
+            for (FoodItem foodItem : foodItemList) {
                 float fibre = getFloat(foodItem.getMeta().getFibre());
                 float total = getFloat(item.getMeta().getFibre());
-                if(fibre<=0)
+                if (fibre <= 0)
                     continue;
                 xVals.add(foodItem.getName());
-                yVals.add(new Entry(fibre/total, index++));
+                yVals.add(new Entry(fibre / total, index++));
             }
             setPieData(xVals, yVals, chart5, ColorTemplate.COLORFUL_COLORS);
             chart5.setCenterText(getFloat(item.getMeta().getFibre()) + " g of Fibre");
@@ -121,13 +135,13 @@ public class MainActivity extends BaseActivity {
             ArrayList<String> xVals = new ArrayList<String>();
             ArrayList<Entry> yVals = new ArrayList<Entry>();
             int index = 0;
-            for(FoodItem foodItem : foodItemList){
+            for (FoodItem foodItem : foodItemList) {
                 float sugar = getFloat(foodItem.getMeta().getSugar());
                 float total = getFloat(item.getMeta().getSugar());
-                if(sugar<=0)
+                if (sugar <= 0)
                     continue;
                 xVals.add(foodItem.getName());
-                yVals.add(new Entry(sugar/total, index++));
+                yVals.add(new Entry(sugar / total, index++));
             }
             setPieData(xVals, yVals, chart6, ColorTemplate.JOYFUL_COLORS);
             chart6.setCenterText(getFloat(item.getMeta().getSugar()) + " g of Sugar");
@@ -136,12 +150,12 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private FoodItem aggregate(List<FoodItem> foodItemList){
+    private FoodItem aggregate(List<FoodItem> foodItemList) {
         FoodItem total = new FoodItem();
         total.setName("total");
         total.setMeta(new Meta());
         Meta totalMeta = total.getMeta();
-        for(FoodItem item : foodItemList){
+        for (FoodItem item : foodItemList) {
             Meta itemMeta = item.getMeta();
             totalMeta.setFibre(totalMeta.getFibre() != null ? String.valueOf(getFloat(totalMeta.getFibre()) + getFloat(itemMeta.getFibre())) : itemMeta.getFibre());
             totalMeta.setPolyunsaturatedFat(totalMeta.getPolyunsaturatedFat() != null ? String.valueOf(getFloat(totalMeta.getPolyunsaturatedFat()) + getFloat(itemMeta.getPolyunsaturatedFat())) : itemMeta.getPolyunsaturatedFat());
