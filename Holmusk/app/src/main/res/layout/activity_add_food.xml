@@ -15,8 +15,9 @@
         android:hint="@string/enter_food_name"/>
 
 
-    <include layout="@layout/view_graph"
-             android:layout_height="match_parent"
-             android:layout_width="match_parent"
-             android:layout_below="@id/search_box"/>
+    <include
+        layout="@layout/view_graph"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@id/search_box"/>
 </RelativeLayout>
