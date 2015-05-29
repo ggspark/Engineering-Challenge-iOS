@@ -41,19 +41,15 @@ public class MainActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                 long begin = System.currentTimeMillis();
                 realm.beginTransaction();
                 foodItemList.get(i).removeFromRealm();
                 realm.commitTransaction();
                 long end = System.currentTimeMillis();
                 Toast.makeText(MainActivity.this, "Realm delete time = " + (end - begin) + " ms", Toast.LENGTH_LONG).show();
-
                 refresh();
             }
         });
-
-
     }
 
     @Override
@@ -82,20 +78,21 @@ public class MainActivity extends BaseActivity {
         Toast.makeText(MainActivity.this, "Realm query time = " + (end - begin) + " ms", Toast.LENGTH_LONG).show();
 
 
+        adapter.clear();
         if(result.size()>0) {
             chartContainer.setVisibility(View.VISIBLE);
             foodItemList = new ArrayList<FoodItem>(result);
 
-            adapter.clear();
             for (FoodItem item : foodItemList)
                 adapter.add(item.getName());
-            adapter.notifyDataSetChanged();
 
             FoodItem totalItem = aggregate(foodItemList);
             setChartData(totalItem);
         }else{
+            startActivity(new Intent(this, AddFoodActivity.class).putExtra("Empty", true));
             chartContainer.setVisibility(View.GONE);
         }
+        adapter.notifyDataSetChanged();
 
     }
 

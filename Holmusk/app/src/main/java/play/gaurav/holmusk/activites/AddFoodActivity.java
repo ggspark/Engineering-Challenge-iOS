@@ -89,10 +89,16 @@ public class AddFoodActivity extends BaseActivity {
                 imm.hideSoftInputFromWindow(searchBox.getWindowToken(), 0);
             }
         });
-
         searchBox.requestFocus();
+    }
 
-
+    @Override
+    public void onBackPressed() {
+        if(this.getIntent().getBooleanExtra("Empty", false)) {
+            Toast.makeText(this, "You cannot go back without adding food", Toast.LENGTH_LONG).show();
+        }else{
+            super.onBackPressed();
+        }
     }
 
     @Override
