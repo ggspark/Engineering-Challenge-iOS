@@ -25,6 +25,7 @@ public class APIServices {
 
     private static final String API_URL = "http://test.holmusk.com/";
 
+    //Setup Gson to work with Realm Objects
     static final Gson gson = new GsonBuilder()
             .setExclusionStrategies(new ExclusionStrategy() {
                 @Override
@@ -39,11 +40,13 @@ public class APIServices {
             })
             .create();
 
+    //Create a rest adapter with our settings
     private static final RestAdapter REST_ADAPTER = new RestAdapter.Builder()
             .setEndpoint(API_URL)
             .setConverter(new GsonConverter(gson))
             .build();
 
+    //Create a service interface to query API
     public interface FoodItemService {
         @GET("/food/search")
         void getFoodList(@Query("q") String name, Callback<List<FoodItem>> cb);
@@ -51,6 +54,9 @@ public class APIServices {
 
     private static final FoodItemService FOOD_ITEM_SERVICE = REST_ADAPTER.create(FoodItemService.class);
 
+    /**
+     * @return FoodItemService
+     */
     public static FoodItemService getFoodItemService() {
         return FOOD_ITEM_SERVICE;
     }

@@ -50,9 +50,11 @@ public class AddFoodActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                //Query the API to get a list of food items
                 APIServices.getFoodItemService().getFoodList(charSequence.toString(), new Callback<List<FoodItem>>() {
                     @Override
                     public void success(List<FoodItem> foodItems, Response response) {
+                        //Populate the adapter with foodItem names
                         adapter.clear();
                         for (FoodItem item : foodItems) {
                             adapter.add(item.getName());
@@ -74,14 +76,17 @@ public class AddFoodActivity extends BaseActivity {
             }
         });
 
+        //When the Item is selected by the user
         searchBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Display the item in graphs
                 selectedItem = foodItemList.get(i);
                 if (selectedItem != null) {
                     chartContainer.setVisibility(View.VISIBLE);
                     setChartData(selectedItem);
                 }
+                //Close the keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(
                         Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(searchBox.getWindowToken(), 0);
@@ -92,6 +97,7 @@ public class AddFoodActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        //IF the back is pressed and there is no data in Realm then show a message
         if (this.getIntent().getBooleanExtra("Empty", false)) {
             Toast.makeText(this, getString(R.string.cannot_back), Toast.LENGTH_SHORT).show();
         }
@@ -110,11 +116,11 @@ public class AddFoodActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
+        //Save the item to Realm on save clicked
         if (id == R.id.save) {
             if (selectedItem != null) {
                 try {
-                    // Copy the object to Realm. Any further changes must happen on realmUser
+                    // Write the object to Realm with benchmarking
                     long begin = System.currentTimeMillis();
                     realm.beginTransaction();
                     FoodItem saveItem = realm.copyToRealm(selectedItem);

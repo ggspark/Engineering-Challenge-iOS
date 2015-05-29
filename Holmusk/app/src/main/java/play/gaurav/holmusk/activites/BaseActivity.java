@@ -30,7 +30,7 @@ import play.gaurav.holmusk.models.FoodItem;
 public class BaseActivity extends AppCompatActivity {
 
     protected static final String NAV_TAG = "Navigation";
-    public static final int DURATION_MILLIS = 2500;
+    public static final int DURATION_MILLIS = 2500; //Chart animation time
     protected Realm realm;
     protected List<FoodItem> foodItemList;
     protected ArrayAdapter<String> adapter;
@@ -81,6 +81,9 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    /**
+     * Setup all the common charts
+     */
     protected void setupCharts() {
         chart1 = (BarChart) findViewById(R.id.chart1);
         setupBarChart(chart1);
@@ -96,6 +99,11 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Setup the pie charts
+     *
+     * @param chart
+     */
     protected static void setupPieChart(PieChart chart) {
         chart.setUsePercentValues(true);
         chart.setDescription("");
@@ -112,6 +120,11 @@ public class BaseActivity extends AppCompatActivity {
         chart.getLegend().setEnabled(false);
     }
 
+    /**
+     * Setup the Bar charts
+     *
+     * @param chart
+     */
     protected static void setupBarChart(BarChart chart) {
         chart.setDescription("");
         chart.setMaxVisibleValueCount(60);
@@ -131,8 +144,14 @@ public class BaseActivity extends AppCompatActivity {
         chart.getLegend().setEnabled(false);
     }
 
+    /**
+     * Setup the charts with the data of FoodItem
+     *
+     * @param item
+     */
     protected void setChartData(FoodItem item) {
 
+        //Chart 1 and 2: Macronutrients and Calorie
         {
             float protein = getFloat(item.getMeta().getProtein());
             float carbs = getFloat(item.getMeta().getCarbohydrate());
@@ -160,7 +179,7 @@ public class BaseActivity extends AppCompatActivity {
             chart2.setCenterText(getFloat(item.getMeta().getEnergy()) + getString(R.string.calories));
         }
 
-
+        //Chart 3: Micronutrients
         {
             float sodium = getFloat(item.getMeta().getSodium());
             float potassium = getFloat(item.getMeta().getPotassium());
@@ -204,6 +223,14 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Setup data of Bar Chart and render with animation
+     *
+     * @param xVals  x-axis values
+     * @param yVals  y-axis values
+     * @param chart  chart object
+     * @param colors color scheme
+     */
     protected static void setBarData(ArrayList<String> xVals, ArrayList<BarEntry> yVals, BarChart chart, int[] colors) {
         BarDataSet set1 = new BarDataSet(yVals, "BarSet");
         set1.setColors(colors);
@@ -220,6 +247,14 @@ public class BaseActivity extends AppCompatActivity {
         chart.animateY(DURATION_MILLIS);
     }
 
+    /**
+     * Setup data of Pie Chart and render with animation
+     *
+     * @param xVals  x-axis values
+     * @param yVals  y-axis values
+     * @param chart  chart object
+     * @param colors color scheme
+     */
     protected static void setPieData(ArrayList<String> xVals, ArrayList<Entry> yVals, PieChart chart, int[] colors) {
         PieDataSet dataSet = new PieDataSet(yVals, "PieSet");
         dataSet.setSliceSpace(3f);
@@ -237,6 +272,13 @@ public class BaseActivity extends AppCompatActivity {
         chart.animateY(DURATION_MILLIS);
     }
 
+    /**
+     * Method to convert String with unit to float without unit
+     *
+     * @param item the string containing float
+     *
+     * @return float value of the first token in string
+     */
     protected float getFloat(String item) {
         if (item == null)
             return 0;

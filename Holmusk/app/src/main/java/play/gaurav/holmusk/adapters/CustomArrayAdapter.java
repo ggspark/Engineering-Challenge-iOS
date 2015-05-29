@@ -20,6 +20,11 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
         items = new ArrayList<String>();
     }
 
+    /**
+     * Setup Filter to return all the objects since API is already doing the filtering
+     *
+     * @return
+     */
     @Override
     public Filter getFilter() {
         return new Filter() {

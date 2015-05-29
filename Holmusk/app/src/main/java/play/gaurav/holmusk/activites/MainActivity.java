@@ -162,7 +162,9 @@ public class MainActivity extends BaseActivity {
 
     /**
      * Find the sum of all the items in the list
+     *
      * @param foodItemList
+     *
      * @return FoodItem containing sum of all the food items
      */
     private FoodItem aggregate(List<FoodItem> foodItemList) {
